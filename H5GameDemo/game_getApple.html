@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" href="./css/common.css" />
+		<script src="js/easeljs.min.js"></script>
+		<script src="js/preloadjs.min.js"></script>
+		<script src="js/tweenjs.min.js"></script>
+	</head>
+
+	<body>
+		<canvas id="getApple"></canvas>
+		<script>
+			(function() {
+				const canvas = document.querySelector('#getApple');
+				canvas.height = document.body.clientHeight;
+				canvas.width = document.body.clientWidth;
+				//创建舞台
+				const stage = new createjs.Stage(canvas);
+				const queue = new createjs.LoadQueue();
+				queue.loadManifest([
+					"./img/appleRed.jpg"
+				]);
+				queue.on("progress", handleFileLoad, this);
+				queue.on("complete", handleComplete, this);
+
+				function handleFileLoad() {
+					console.log("已加载" + queue.progress + "%")
+				};
+
+				function handleComplete() {
+					console.log('资源队列加载完成')
+				};
+				const appleRed = new createjs.Bitmap("./img/appleRed.jpg");
+				stage.addChild(appleRed);
+
+				createjs.Tween.get(appleRed, {
+						loop: -1,
+						bounce: true
+					})
+					.to({
+						style: "#00FF00"
+					}, 1000) // supports 6 digit hex colors
+					.to({
+						style: "#00F"
+					}, 1000) // 3 digit hex colors
+					.to({
+						style: "rgb(255,128,0)"
+					}, 1000) // rgb and rgba colors
+					.to({
+						style: "hsl(295, 100%, 50%)"
+					}, 1000) // hsl & hsla colors
+					.to({
+						style: "rgb(0%,100%,100%)"
+					}, 1000)
+				//				createjs.Ticker.setFPS(30);  
+				//				createjs.Ticker.addEventListener("tick",function(){  
+				//				      
+				//				    stage.update();  
+				//				      
+				//				}) 
+				createjs.Ticker.timingMode = createjs.Ticker.RAF;
+				createjs.Ticker.addEventListener("tick", stage);
+			})()
+		</script>
+
+	</body>
+
+</html>
